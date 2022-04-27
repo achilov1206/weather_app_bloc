@@ -1,9 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:weather_app_bloc/blocs/blocs.dart';
-
-import '../widgets/error_dialog.dart';
 import './map_page.dart';
 
 class SearchPage extends StatefulWidget {
@@ -57,17 +52,7 @@ class _SearchPageState extends State<SearchPage> {
                         MaterialPageRoute(
                           builder: (context) => const MapPage(),
                         ),
-                      ).then((selectedPosition) {
-                        print(selectedPosition);
-                        if (selectedPosition != null) {
-                          // context.read<WeatherBloc>().add(
-                          //       FetchWeatherByLocationEvent(
-                          //           location: selectedPosition),
-                          //     );
-                          //Navigator.pop(context);
-                          errorDialog(context, 'Will be soon');
-                        }
-                      });
+                      );
                     },
                     icon: const Icon(Icons.map),
                   ),

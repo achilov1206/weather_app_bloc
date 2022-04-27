@@ -1,7 +1,7 @@
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../models/custom_error.dart';
-
+import '../models/locations.dart';
 import '../exceptions/weather_exception.dart';
 import '../services/weather_api_services.dart';
 import '../models/weather.dart';
@@ -12,9 +12,14 @@ class WeatherRepository {
     required this.weatherApiServices,
   });
 
-  Future<Weather> fetchWeather(String city) async {
+  Future<Weather> fetchWeather([String? city, int? woeidByLocation]) async {
     try {
-      final int woeid = await weatherApiServices.getWoeid(city);
+      int woeid;
+      if (city != null) {
+        woeid = await weatherApiServices.getWoeid(city);
+      } else {
+        woeid = woeidByLocation!;
+      }
       final Weather weather = await weatherApiServices.getWeather(woeid);
       return weather;
     } on WeatherException catch (e) {
@@ -24,10 +29,10 @@ class WeatherRepository {
     }
   }
 
-  Future<Weather> fetchWeatherByLocation(LatLng location) async {
+  Future<List<Locations>> fetchWoeidsByLocation(LatLng location) async {
     try {
-      final Weather weather =
-          await weatherApiServices.getWeatherByLocation(location);
+      final List<Locations> weather =
+          await weatherApiServices.getWoeidsByLocation(location);
       return weather;
     } on WeatherException catch (e) {
       throw CustomError(errMsg: e.message);

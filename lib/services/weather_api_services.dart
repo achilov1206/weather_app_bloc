@@ -4,6 +4,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import './http_error_handler.dart';
 import '../models/weather.dart';
+import '../models/locations.dart';
 import '../exceptions/weather_exception.dart';
 import '../constants/constants.dart';
 
@@ -61,7 +62,7 @@ class WeatherApiServices {
     }
   }
 
-  Future<Weather> getWeatherByLocation(LatLng location) async {
+  Future<List<Locations>> getWoeidsByLocation(LatLng location) async {
     double lat = location.latitude;
     double lon = location.longitude;
     final Uri uri = Uri(
@@ -73,15 +74,16 @@ class WeatherApiServices {
 
     try {
       final http.Response response = await http.get(uri);
-
+      List<Locations> locations = [];
       if (response.statusCode != 200) {
         throw Exception(httpErrorHandler(response));
       }
-      final weatherJson = json.decode(response.body);
-      print(weatherJson);
-      final Weather weather = Weather.fromJson(weatherJson);
-
-      return weather;
+      List jsonData = json.decode(response.body);
+      for (Map<String, dynamic> data in jsonData) {
+        final Locations loc = Locations.fromMap(data);
+        locations.add(loc);
+      }
+      return locations;
     } catch (e) {
       rethrow;
     }

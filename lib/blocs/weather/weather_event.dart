@@ -15,9 +15,9 @@ class FetchWeatherEvent extends WeatherEvent {
   });
 }
 
-class FetchWeatherByLocationEvent extends WeatherEvent {
+class FetchWoeidsByLocationEvent extends WeatherEvent {
   final LatLng location;
-  const FetchWeatherByLocationEvent({
+  const FetchWoeidsByLocationEvent({
     required this.location,
   });
 }
