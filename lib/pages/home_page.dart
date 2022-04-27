@@ -95,75 +95,84 @@ class _HomePageState extends State<HomePage> {
             child: CircularProgressIndicator(),
           );
         }
-        return ListView(
-          children: [
-            SizedBox(
-              height: MediaQuery.of(context).size.height / 6,
-            ),
-            Text(
-              state.weather.title,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 40,
-                fontWeight: FontWeight.bold,
+        return RefreshIndicator(
+          onRefresh: () async {
+            context
+                .read<WeatherBloc>()
+                .add(FetchWeatherEvent(city: state.weather.title));
+          },
+          child: ListView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            children: [
+              SizedBox(
+                height: MediaQuery.of(context).size.height / 6,
               ),
-            ),
-            const SizedBox(height: 40),
-            Text(
-              TimeOfDay.fromDateTime(state.weather.lastUpdated).format(context),
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 40,
+              Text(
+                state.weather.title,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 40,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  _showTemperature(state.weather.theTemp),
-                  style: const TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                  ),
+              const SizedBox(height: 40),
+              Text(
+                TimeOfDay.fromDateTime(state.weather.lastUpdated)
+                    .format(context),
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 40,
                 ),
-                const SizedBox(width: 10),
-                Column(
-                  children: [
-                    Text(
-                      _showTemperature(state.weather.maxTemp),
-                      style: const TextStyle(
-                        fontSize: 16,
-                      ),
+              ),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    _showTemperature(state.weather.theTemp),
+                    style: const TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
                     ),
-                    const SizedBox(height: 10),
-                    Text(
-                      _showTemperature(state.weather.minTemp),
-                      style: const TextStyle(
-                        fontSize: 16,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            const SizedBox(height: 40),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                const Spacer(),
-                _showIcon(state.weather.weatherStateAbbr),
-                const SizedBox(width: 20),
-                Text(
-                  state.weather.weatherStateName,
-                  style: const TextStyle(
-                    fontSize: 32,
                   ),
-                ),
-                const Spacer(),
-              ],
-            ),
-          ],
+                  const SizedBox(width: 10),
+                  Column(
+                    children: [
+                      Text(
+                        _showTemperature(state.weather.maxTemp),
+                        style: const TextStyle(
+                          fontSize: 16,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        _showTemperature(state.weather.minTemp),
+                        style: const TextStyle(
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              const SizedBox(height: 40),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  const Spacer(),
+                  _showIcon(state.weather.weatherStateAbbr),
+                  const SizedBox(width: 20),
+                  Text(
+                    state.weather.weatherStateName,
+                    style: const TextStyle(
+                      fontSize: 32,
+                    ),
+                  ),
+                  const Spacer(),
+                ],
+              ),
+            ],
+          ),
         );
       },
     );

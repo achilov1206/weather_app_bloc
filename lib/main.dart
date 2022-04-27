@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import './services/weather_api_services.dart';
 import './repositories/weather_repository.dart';
 import './pages/home_page.dart';
 import './blocs/blocs.dart';
 
 void main() {
+  if (defaultTargetPlatform == TargetPlatform.android) {
+    AndroidGoogleMapsFlutter.useAndroidViewSurface = true;
+  }
   runApp(const MyApp());
 }
 

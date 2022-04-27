@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:weather_app_bloc/blocs/blocs.dart';
+
+import '../widgets/error_dialog.dart';
+import './map_page.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -37,15 +43,36 @@ class _SearchPageState extends State<SearchPage> {
           children: [
             const SizedBox(height: 60),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 30),
+              padding: const EdgeInsets.symmetric(horizontal: 30),
               child: TextFormField(
                 autofocus: true,
                 style: const TextStyle(fontSize: 18),
                 decoration: InputDecoration(
                   labelText: 'City Name',
-                  hintText: 'more than 2 characters',
-                  prefixIcon: Icon(Icons.search),
-                  border: OutlineInputBorder(),
+                  hintText: 'More than 2 characters',
+                  suffixIcon: IconButton(
+                    onPressed: () async {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const MapPage(),
+                        ),
+                      ).then((selectedPosition) {
+                        print(selectedPosition);
+                        if (selectedPosition != null) {
+                          // context.read<WeatherBloc>().add(
+                          //       FetchWeatherByLocationEvent(
+                          //           location: selectedPosition),
+                          //     );
+                          //Navigator.pop(context);
+                          errorDialog(context, 'Will be soon');
+                        }
+                      });
+                    },
+                    icon: const Icon(Icons.map),
+                  ),
+                  prefixIcon: const Icon(Icons.search),
+                  border: const OutlineInputBorder(),
                 ),
                 validator: (String? input) {
                   if (input == null || input.trim().length < 2) {
@@ -58,10 +85,10 @@ class _SearchPageState extends State<SearchPage> {
                 },
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _submit,
-              child: Text(
+              child: const Text(
                 'How`s the weather',
                 style: TextStyle(
                   fontSize: 18,

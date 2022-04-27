@@ -14,3 +14,10 @@ class FetchWeatherEvent extends WeatherEvent {
     required this.city,
   });
 }
+
+class FetchWeatherByLocationEvent extends WeatherEvent {
+  final LatLng location;
+  const FetchWeatherByLocationEvent({
+    required this.location,
+  });
+}
